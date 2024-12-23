@@ -1,0 +1,33 @@
+#root {
+	font-family: 'Roboto', sans-serif;
+}
+
+/* Landing page */
+
+h1 {
+	font-size: 4rem;
+	text-align: center;
+	border-bottom: 2px solid #000;
+}
+
+h2,
+button {
+	font-size: 2rem;
+	text-align: center;
+}
+
+.mode-container {
+	display: flex;
+	justify-content: space-around;
+	align-items: center;
+	border: 1px solid red;
+}
+
+.mode-container > button:hover {
+	cursor: pointer;
+}
+
+.mode-container > button {
+	font-size: 2rem;
+	font-style: none;
+}
