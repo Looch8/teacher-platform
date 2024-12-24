@@ -1,20 +1,16 @@
 import './App.css';
+import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
+import HomePage from './pages/HomePage';
+import RevisionPage from './pages/RevisionPage';
 
 function App() {
 	return (
-		<>
-			<h1>Teacher Platform</h1>
-			<div className="mode-container">
-				<button
-					onClick={() => {
-						console.log('clicked');
-					}}
-				>
-					Revision Mode
-				</button>
-				<h2>Assessment Mode (coming soon)</h2>
-			</div>
-		</>
+		<Router>
+			<Routes>
+				<Route path="/" element={<HomePage />} />
+				<Route path="/revision" element={<RevisionPage />} />
+			</Routes>
+		</Router>
 	);
 }
 
