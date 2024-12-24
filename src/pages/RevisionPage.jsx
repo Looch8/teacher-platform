@@ -1,25 +1,16 @@
+import Dropdown from '../components/Dropdown';
 import '../styles/RevisionPage.css';
 
 function RevisionPage() {
+	const subjects = ['Math', 'Science', 'History'];
+	const yearLevels = ['Year 1', 'Year 2', 'Year 3'];
+	const topics = ['Algebra', 'Biology', 'World War II'];
 	return (
 		<div>
 			<h1>Revision Mode</h1>
-			<div className="dropdown-container">
-				<div className="dropdown">
-					<button className="dropdown-button">Menu</button>
-					<ul className="dropdown-menu">
-						<li>
-							<a href="#option1">Option 1</a>
-						</li>
-						<li>
-							<a href="#option2">Option 2</a>
-						</li>
-						<li>
-							<a href="#option3">Option 3</a>
-						</li>
-					</ul>
-				</div>
-			</div>
+			<Dropdown label="Subject" options={subjects} />
+			<Dropdown label="Year Level" options={yearLevels} />
+			<Dropdown label="Topic" options={topics} />
 		</div>
 	);
 }
