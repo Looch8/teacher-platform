@@ -1,22 +1,21 @@
 import { useState } from 'react';
 
-const Dropdown = ({ label, options }) => {
+const Dropdown = ({ label, options, onSelect }) => {
 	const [isOpen, setIsOpen] = useState(false);
-	const [selectedOption, setSelectedOption] = useState('');
 
 	const toggleDropdown = () => {
 		setIsOpen(!isOpen);
 	};
 
 	const handleOptionClick = (option) => {
-		setSelectedOption(option);
+		onSelect(option); // Notify the parent of the selection
 		setIsOpen(false); // Close the dropdown after selection
 	};
 
 	return (
 		<div className="dropdown">
 			<button onClick={toggleDropdown} className="dropdown-button">
-				{selectedOption || label}
+				{label}
 			</button>
 			{isOpen && (
 				<ul className="dropdown-menu">
