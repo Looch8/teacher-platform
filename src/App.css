@@ -1,59 +1,176 @@
-/* App.css */
+/* General styles */
+body {
+	margin: 0;
+	font-family: 'Roboto', sans-serif;
+	background-color: #f8f9fa;
+	color: #333;
+}
 
 #root {
-	font-family: 'Roboto', sans-serif;
+	display: flex;
+	flex-direction: column;
+	align-items: center;
+	justify-content: center;
+	min-height: 100vh;
+	padding: 20px;
 }
 
-/* Landing page */
-
+/* Heading styles */
 h1 {
-	font-size: 4rem;
+	font-size: 3rem;
 	text-align: center;
-	border-bottom: 2px solid #000;
+	color: #343a40;
+	margin-bottom: 30px;
+	text-transform: uppercase;
 }
 
-.assessment-mode-btn,
-button {
-	font-size: 2rem;
+h2 {
+	font-size: 1.5rem;
 	text-align: center;
-	font-size: 2rem;
-	padding: 10px 15px;
+	color: #6c757d;
+	margin-bottom: 20px;
+}
+
+/* Button styles */
+button {
+	font-size: 1rem;
+	padding: 10px 20px;
 	background-color: #007bff;
 	color: white;
 	border: none;
 	border-radius: 5px;
 	cursor: pointer;
-	text-align: center;
-	transition: background-color 0.3s ease;
+	transition: background-color 0.3s ease, transform 0.2s ease;
 }
 
+button:hover {
+	background-color: #0056b3;
+	transform: scale(1.05);
+}
+
+button:disabled {
+	background-color: #6c757d;
+	cursor: not-allowed;
+}
+
+/* Home page styles */
 .mode-container {
 	display: flex;
-	justify-content: space-around;
+	flex-direction: column;
+	gap: 20px;
 	align-items: center;
 }
 
-.mode-container > button:hover {
-	cursor: pointer;
+.mode-container button,
+.mode-container h2 {
+	width: 250px;
+	text-align: center;
 }
 
-.mode-container > button {
-	font-size: 2rem;
-	font-style: none;
-}
-
-/* Home button */
+/* Revision page styles */
 .home-button {
-	position: absolute;
+	position: fixed;
 	top: 20px;
 	left: 20px;
-	font-size: 1rem;
-	padding: 10px 15px;
+	font-size: 0.9rem;
+	padding: 8px 16px;
 	background-color: #007bff;
 	color: white;
 	border: none;
 	border-radius: 5px;
 	cursor: pointer;
-	text-align: center;
 	transition: background-color 0.3s ease;
+}
+
+.home-button:hover {
+	background-color: #0056b3;
+}
+
+.dropdown-container {
+	display: flex;
+	flex-wrap: wrap;
+	justify-content: center;
+	gap: 15px;
+	margin-bottom: 30px;
+}
+
+.selections p {
+	font-size: 1rem;
+	margin: 5px 0;
+	font-weight: bold;
+	color: #495057;
+	text-align: center;
+}
+
+/* Submit button */
+.submit-button {
+	padding: 12px 24px;
+	background-color: #28a745;
+	color: white;
+	border: none;
+	border-radius: 5px;
+	cursor: pointer;
+	font-size: 1rem;
+	transition: background-color 0.3s ease, transform 0.2s ease;
+}
+
+.submit-button:hover {
+	background-color: #218838;
+	transform: scale(1.05);
+}
+
+.submit-button:disabled {
+	background-color: #6c757d;
+	cursor: not-allowed;
+}
+
+/* Prompt page styles */
+.prompt-subtitle {
+	font-size: 1.5rem;
+	margin: 20px 0;
+	color: #495057;
+}
+
+ul {
+	list-style: none;
+	padding: 0;
+}
+
+li {
+	margin-bottom: 10px;
+}
+
+label {
+	font-size: 1rem;
+	display: flex;
+	align-items: center;
+	gap: 10px;
+	cursor: pointer;
+	color: #333;
+}
+
+input[type='radio'] {
+	transform: scale(1.2);
+	margin-right: 10px;
+}
+
+/* Responsive styles */
+@media (max-width: 768px) {
+	h1 {
+		font-size: 2rem;
+	}
+
+	.dropdown-container {
+		flex-direction: column;
+		gap: 10px;
+	}
+
+	button {
+		font-size: 0.9rem;
+	}
+
+	.mode-container button,
+	.mode-container h2 {
+		width: 200px;
+	}
 }
