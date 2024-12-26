@@ -1,7 +1,9 @@
+import '../styles/RevisionPage.css';
 import { useState } from 'react';
 import { Link, useNavigate } from 'react-router-dom'; // Import useNavigate
 import Dropdown from '../components/Dropdown';
-import '../styles/RevisionPage.css';
+import BackButton from '../components/BackButton';
+import HomeButton from '../components/HomeButton';
 
 function RevisionPage() {
 	const subjects = ['Math', 'Science', 'History'];
@@ -44,11 +46,10 @@ function RevisionPage() {
 
 	return (
 		<>
+			<BackButton />
+			<HomeButton />
 			<h1>Revision Mode</h1>
 			{/* Button to go back homepage */}
-			<Link to="/">
-				<button className="home-button">Home</button>
-			</Link>
 			<div className="dropdown-container">
 				<Dropdown
 					label="Subject"

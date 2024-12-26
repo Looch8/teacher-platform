@@ -1,7 +1,8 @@
 import { useLocation, useNavigate } from 'react-router-dom';
 import { useState } from 'react';
 import '../styles/PromptPage.css';
-import { Link } from 'react-router-dom';
+import BackButton from '../components/BackButton';
+import HomeButton from '../components/HomeButton';
 
 function PromptPage() {
 	const location = useLocation(); // Retrieve passed data
@@ -36,9 +37,8 @@ function PromptPage() {
 
 	return (
 		<div className="prompt-container">
-			<Link to="/">
-				<button className="home-button">Home</button>
-			</Link>
+			<BackButton />
+			<HomeButton />
 			<h1 className="page-title">Prompt Selection</h1>
 			<div className="info-box">
 				<p>
