@@ -8,7 +8,9 @@ function HomePage() {
 				<Link to="/revision">
 					<button>Revision Mode</button>
 				</Link>
-				<h2>Assessment Mode (coming soon)</h2>
+				<h2 className="assessment-mode-btn">
+					Assessment Mode (coming soon)
+				</h2>
 			</div>
 		</>
 	);

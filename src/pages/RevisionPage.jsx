@@ -1,11 +1,11 @@
 import { useState } from 'react';
-import { Link } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom'; // Import useNavigate
 import Dropdown from '../components/Dropdown';
 import '../styles/RevisionPage.css';
 
 function RevisionPage() {
 	const subjects = ['Math', 'Science', 'History'];
-	const yearLevels = ['Year 1', 'Year 2', 'Year 3'];
+	const yearLevels = ['Year 8', 'Year 9', 'Year 10'];
 	const topicsData = {
 		Math: ['Algebra', 'Geometry', 'Calculus'],
 		Science: ['Biology', 'Chemistry', 'Physics'],
@@ -15,6 +15,8 @@ function RevisionPage() {
 	const [selectedSubject, setSelectedSubject] = useState('');
 	const [selectedYearLevel, setSelectedYearLevel] = useState('');
 	const [selectedTopic, setSelectedTopic] = useState('');
+
+	const navigate = useNavigate(); // Initialize navigation
 
 	const handleSubjectSelect = (subject) => {
 		setSelectedSubject(subject);
@@ -30,10 +32,13 @@ function RevisionPage() {
 	};
 
 	const handleSubmit = () => {
-		console.log({
-			Subject: selectedSubject,
-			YearLevel: selectedYearLevel,
-			Topic: selectedTopic,
+		// Navigate to the prompt page with selected data
+		navigate('/prompt', {
+			state: {
+				subject: selectedSubject,
+				yearLevel: selectedYearLevel,
+				topic: selectedTopic,
+			},
 		});
 	};
 
@@ -68,7 +73,13 @@ function RevisionPage() {
 				)}
 				{selectedTopic && <p>Selected Topic: {selectedTopic}</p>}
 			</div>
-			<button onClick={handleSubmit} className="submit-button">
+			<button
+				onClick={handleSubmit}
+				className="submit-button"
+				disabled={
+					!selectedSubject || !selectedYearLevel || !selectedTopic
+				} // Disable until all are selected
+			>
 				Submit
 			</button>
 		</>

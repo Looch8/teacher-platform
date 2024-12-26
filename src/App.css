@@ -1,3 +1,5 @@
+/* App.css */
+
 #root {
 	font-family: 'Roboto', sans-serif;
 }
@@ -10,7 +12,7 @@ h1 {
 	border-bottom: 2px solid #000;
 }
 
-h2,
+.assessment-mode-btn,
 button {
 	font-size: 2rem;
 	text-align: center;
