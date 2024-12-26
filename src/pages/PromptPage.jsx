@@ -32,7 +32,7 @@ function PromptPage() {
 
 	const handleSubmit = () => {
 		console.log('Selected Prompt:', selectedPrompt);
-		// Navigate to the next step or perform another action here
+		navigate('/interaction', { state: { selectedPrompt } });
 	};
 
 	return (

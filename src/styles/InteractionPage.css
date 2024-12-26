@@ -1,0 +1,106 @@
+/* InteractionPage.css */
+
+.prompt-interaction-container {
+	display: flex;
+	flex-direction: column;
+	align-items: center;
+	justify-content: center;
+	padding: 2rem;
+	background: linear-gradient(135deg, #f8f9fa, #e9ecef);
+	font-family: 'Arial', sans-serif;
+	color: #333;
+	min-height: 100vh;
+}
+
+h1 {
+	font-size: 2rem;
+	margin-bottom: 1.5rem;
+	color: #444;
+	text-transform: capitalize;
+	text-align: center;
+}
+
+.question-container {
+	width: 80%;
+	margin: 1.5rem 0;
+	text-align: center;
+}
+
+textarea.output-box {
+	width: 100%;
+	height: 5rem;
+	resize: none;
+	border: 1px solid #ddd;
+	border-radius: 8px;
+	padding: 1rem;
+	background: #f9f9f9;
+	font-size: 1rem;
+	color: #555;
+}
+
+.helper-prompts {
+	width: 80%;
+	margin: 1rem 0;
+}
+
+.helper-prompts h3 {
+	font-size: 1.2rem;
+	margin-bottom: 0.5rem;
+}
+
+.helper-prompts ul {
+	list-style-type: disc;
+	padding-left: 1.5rem;
+}
+
+.helper-prompts li {
+	margin-bottom: 0.5rem;
+	font-size: 1rem;
+	color: #666;
+}
+
+.answer-input {
+	width: 80%;
+	margin: 1.5rem 0;
+	text-align: center;
+}
+
+.answer-input textarea {
+	width: 100%;
+	height: 8rem;
+	resize: none;
+	border: 1px solid #ddd;
+	border-radius: 8px;
+	padding: 1rem;
+	background: #f9f9f9;
+	font-size: 1rem;
+	color: #333;
+}
+
+.answer-input button {
+	margin-top: 1rem;
+	padding: 0.5rem 2rem;
+	font-size: 1rem;
+	background-color: #007bff;
+	color: white;
+	border: none;
+	border-radius: 5px;
+	cursor: pointer;
+	transition: background-color 0.3s ease;
+}
+
+.answer-input button:hover {
+	background-color: #0056b3;
+}
+
+.response-feedback {
+	margin-top: 2rem;
+	padding: 1rem;
+	background-color: #e9ffe9;
+	border: 1px solid #b2f0b2;
+	border-radius: 8px;
+	font-size: 1rem;
+	color: #2b7a2b;
+	width: 80%;
+	text-align: center;
+}
