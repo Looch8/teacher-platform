@@ -31,9 +31,8 @@ Keep your questions direct, with limited unnecessary dialogue around the line of
 
 	// Fetch the question and helper prompts from the backend
 	useEffect(() => {
-		// Call the backend API to get the initial question and helper prompts
 		axios
-			.post('/api/start', { prompt: initialPrompt })
+			.post('http://localhost:8000/api/start', { prompt: initialPrompt })
 			.then((response) => {
 				setChatGPTQuestion(response.data.question);
 				setHelperPrompts(response.data.helperPrompts);
@@ -44,9 +43,11 @@ Keep your questions direct, with limited unnecessary dialogue around the line of
 	}, [initialPrompt]);
 
 	const handleSubmit = () => {
-		// Send the answer to the backend to evaluate
 		axios
-			.post('/api/evaluate', { answer, initialPrompt })
+			.post('http://localhost:8000/api/evaluate', {
+				answer,
+				initialPrompt,
+			})
 			.then((response) => {
 				setResponse(response.data.feedback); // Receive feedback from ChatGPT
 				setChatGPTQuestion(response.data.nextQuestion); // If next question is returned

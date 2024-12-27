@@ -1,15 +1,11 @@
-import { useLocation, useNavigate } from 'react-router-dom';
 import { useState } from 'react';
-import '../styles/PromptPage.css';
-import BackButton from '../components/BackButton';
-import HomeButton from '../components/HomeButton';
+import { useLocation, useNavigate } from 'react-router-dom';
 
 function PromptPage() {
-	const location = useLocation(); // Retrieve passed data
+	const location = useLocation();
 	const navigate = useNavigate();
-	const { subject, yearLevel, topic } = location.state || {}; // Destructure state
+	const { subject, yearLevel, topic } = location.state || {};
 
-	// Hardcoded prompts based on subject, year level, and topic
 	const promptsData = {
 		History: {
 			'Year 8': {
@@ -20,64 +16,39 @@ function PromptPage() {
 				],
 			},
 		},
-		// Add more subjects, year levels, and topics here as needed
 	};
 
-	const prompts = promptsData[subject]?.[yearLevel]?.[topic] || []; // Get prompts
+	const prompts = promptsData[subject]?.[yearLevel]?.[topic] || [];
 	const [selectedPrompt, setSelectedPrompt] = useState('');
 
-	const handlePromptSelect = (prompt) => {
-		setSelectedPrompt(prompt);
-	};
-
 	const handleSubmit = () => {
-		console.log('Selected Prompt:', selectedPrompt);
-		navigate('/interaction', { state: { selectedPrompt } });
+		navigate('/interaction', {
+			state: { selectedPrompt, subject, yearLevel, topic },
+		});
 	};
 
 	return (
-		<div className="prompt-container">
-			<BackButton />
-			<HomeButton />
-			<h1 className="page-title">Prompt Selection</h1>
-			<div className="info-box">
-				<p>
-					<strong>Subject:</strong> {subject}
-				</p>
-				<p>
-					<strong>Year Level:</strong> {yearLevel}
-				</p>
-				<p>
-					<strong>Topic:</strong> {topic}
-				</p>
-			</div>
-
-			<h2 className="prompt-subtitle">Select a Prompt</h2>
-			<ul className="prompt-list">
+		<>
+			<h1>Prompt Selection</h1>
+			<ul>
 				{prompts.map((prompt, index) => (
-					<li key={index} className="prompt-item">
+					<li key={index}>
 						<label>
 							<input
 								type="radio"
-								name="prompt"
 								value={prompt}
+								onChange={() => setSelectedPrompt(prompt)}
 								checked={selectedPrompt === prompt}
-								onChange={() => handlePromptSelect(prompt)}
 							/>
-							<span>{prompt}</span>
+							{prompt}
 						</label>
 					</li>
 				))}
 			</ul>
-
-			<button
-				onClick={handleSubmit}
-				className="submit-button"
-				disabled={!selectedPrompt} // Disable until a prompt is selected
-			>
+			<button onClick={handleSubmit} disabled={!selectedPrompt}>
 				Submit
 			</button>
-		</div>
+		</>
 	);
 }
 
