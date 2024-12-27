@@ -13,7 +13,7 @@ const InteractionPage = () => {
 
 Start at the 'Unistructural' level and continue asking questions at this level until I demonstrate strong proficiency and sophistication in my responses. 
 
-Only move to the next level once I've answered multiple questions of each level and shown the necessary proficiency to level up. If I have not demonstrated enough understanding of a concept or idea, ask me a specific follow up question on the same content.
+Only move to the next level once I've answered multiple questions of each level and shown the necessary proficiency to level up. If I have not demonstrated enough understanding of a concept or idea, ask me a specific follow-up question on the same content.
 
 Incorporate an Item Response Theory (IRT) framework by considering each question's difficulty level and my ability level, adapting subsequent questions to better differentiate between levels of understanding as I progress.
 
@@ -21,7 +21,7 @@ After 'Unistructural', move through the other SOLO levels until I possibly reach
 
 If after multiple questions at the same level I can't demonstrate satisfactory proficiency, finish the conversation and provide me with helpful feedback.
 
-Keep your questions direct, with limited unnecessary dialogue around the line of questioning. Never, at anytime, paraphrase  or restate my correct/complete answers. Only clarify specific details if I am off track or incorrect, alternatively, ask another question to clarify my understanding.
+Keep your questions direct, with limited unnecessary dialogue around the line of questioning. Never, at anytime, paraphrase or restate my correct/complete answers. Only clarify specific details if I am off track or incorrect, alternatively, ask another question to clarify my understanding.
 `;
 
 	const [chatGPTQuestion, setChatGPTQuestion] = useState('');
@@ -66,15 +66,26 @@ Keep your questions direct, with limited unnecessary dialogue around the line of
 					setFeedback('No feedback provided.');
 				}
 
-				// If there's no next question, don't set a question at all
+				// Handle logic for continuing at the same SOLO level
 				if (
+					feedbackText.includes('No proficiency shown') ||
+					feedbackText.includes('to progress to the next level')
+				) {
+					// If feedback indicates not enough proficiency for the next level, continue with the same question
+					setChatGPTQuestion(
+						'Please provide more details or demonstrate a deeper understanding at the current level.'
+					);
+				} else if (
 					nextQuestion &&
 					nextQuestion !== 'No next question available.'
 				) {
+					// If there's a valid next question, set it
 					setChatGPTQuestion(nextQuestion);
 				} else {
-					// Handle the case where no new question is available (perhaps show feedback here)
-					setChatGPTQuestion('No next question available.');
+					// If there's no next question available, provide feedback instead
+					setChatGPTQuestion(
+						'No next question available. Please review the feedback.'
+					);
 				}
 			})
 			.catch((error) => {
