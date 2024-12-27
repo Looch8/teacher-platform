@@ -22,13 +22,7 @@ const ChatSession = ({ initialPrompt }) => {
 		}
 	}, [initialPrompt]);
 
-	return (
-		<div>
-			<div className="question-container">
-				<p>{chatGPTQuestion}</p>
-			</div>
-		</div>
-	);
+	return <div></div>;
 };
 
 export default ChatSession;
