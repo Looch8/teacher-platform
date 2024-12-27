@@ -16,6 +16,15 @@ function PromptPage() {
 				],
 			},
 		},
+		Math: {
+			'Year 8': {
+				Algebra: [
+					'Linear equations',
+					'Quadratic equations',
+					'Graphing',
+				],
+			},
+		},
 	};
 
 	const prompts = promptsData[subject]?.[yearLevel]?.[topic] || [];
