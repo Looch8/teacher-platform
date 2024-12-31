@@ -158,7 +158,7 @@ export default InteractionPage;
 //  Keep entire conversation in the output box.
 //  Add a button to restart the conversation.
 //  Add cheat protection - if they copy and paste the question, it will not work.
-//  Make it full screen
+
 //
 
 // BONUS FEATURES
@@ -174,7 +174,6 @@ export default InteractionPage;
 //  Should just be question - answer, question - answer.
 // If it is wrong, let them know and then continue to ask questions..
 // Try to use Chat gpt-4
-// KIOSK mode - makes it go full screen - force tab into full screen when the prompts start. You can alt tab, but you cannot get back into the browser unless   teacher lets them back in.
 // Web hosting
 
 // Teacher can upload a CSV with concepts, and then the chat GPT will ask questions based on that.
