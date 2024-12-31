@@ -1,13 +1,24 @@
 import { useState, useEffect } from 'react';
 import { useLocation, useNavigate } from 'react-router-dom';
-import axios from 'axios'; // For communication with the backend
+import axios from 'axios';
 import '../styles/InteractionPage.css';
 import ChatSession from '../components/ChatSession';
+import { enterFullScreen, exitFullScreen } from '../utils/fullscreen';
 
 const InteractionPage = () => {
 	const location = useLocation();
 	const navigate = useNavigate();
 	const { subject, yearLevel, topic, selectedPrompt } = location.state || {};
+
+	// KIOSK mode: Enter fullscreen when the component mounts
+	useEffect(() => {
+		enterFullScreen();
+
+		// Cleanup: Exit fullscreen when the component unmounts
+		return () => {
+			exitFullScreen();
+		};
+	}, []);
 
 	const initialPrompt = `Acting as an expert in diagnostic questioning and computer adaptive testing, please assess my knowledge and understanding of ${topic}. ${selectedPrompt}. Ask me one question at a time to measure my level of understanding, use SOLO Taxonomy as a framework with a mastery learning approach. 
 
