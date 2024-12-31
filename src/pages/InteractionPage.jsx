@@ -138,3 +138,32 @@ Keep your questions direct, with limited unnecessary dialogue around the line of
 };
 
 export default InteractionPage;
+
+// Features - meeting with Adrian
+
+//  Keep feedback to "correct" or "incorrect" and provide a new question to the user.
+//  Ready by 22nd or 23rd to present.
+//  Change feedback to not say the level we are on - just level 1, or level 2 etc, and tell them when it levels up.
+//  Keep entire conversation in the output box.
+//  Add a button to restart the conversation.
+//  Add cheat protection - if they copy and paste the question, it will not work.
+//  Make it full screen
+//
+
+// BONUS FEATURES
+//  Helpful prompts - Should be buttons
+// 1st Button - I can't spell it - Show me with 3 words or phrases to choose from and I will identify the correct answer.
+// 2nd Button - I can't remember - remind me. Short, concise information.
+// 3rd Button - We didn't learn that - Goes to another topic
+
+// Features to focus on
+// Fix bug
+// Scrolling feature of entire conversation. The students answers should be in the output box. plus the chat gpt's question. Student's answers in one color, chat GPT questions in another question.
+// Remove feedback response - If after multiple questions at the same level I can't demonstrate satisfactory proficiency, finish the conversation and provide me with helpful feedback.
+//  Should just be question - answer, question - answer.
+// If it is wrong, let them know and then continue to ask questions..
+// Try to use Chat gpt-4
+// KIOSK mode - makes it go full screen - force tab into full screen when the prompts start. You can alt tab, but you cannot get back into the browser unless   teacher lets them back in.
+// Web hosting
+
+// Teacher can upload a CSV with concepts, and then the chat GPT will ask questions based on that.
