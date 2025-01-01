@@ -17,24 +17,13 @@ const InteractionPage = () => {
 		};
 	}, []);
 
-	const initialPrompt = `Acting as an expert in diagnostic questioning and computer adaptive testing, please assess my knowledge and understanding of ${topic}. ${selectedPrompt}. Ask me one question at a time to measure my level of understanding, use SOLO Taxonomy as a framework with a mastery learning approach. Start at the 'Unistructural' level and continue asking questions at this level until I demonstrate strong proficiency and sophistication in my responses. 
-
-Only move to the next level once I've answered multiple questions of each level and shown the necessary proficiency to level up. If I have not demonstrated enough understanding of a concept or idea, ask me a specific follow-up question on the same content.
-
-Incorporate an Item Response Theory (IRT) framework by considering each question's difficulty level and my ability level, adapting subsequent questions to better differentiate between levels of understanding as I progress.
-
-After 'Unistructural', move through the other SOLO levels until I possibly reach Extended Abstract, but only if I consistently show adequate proficiency at each level. 
-
-If after multiple questions at the same level I can't demonstrate satisfactory proficiency, finish the conversation and provide me with helpful feedback.
-
-Keep your questions direct, with limited unnecessary dialogue around the line of questioning. Never, at anytime, paraphrase or restate my correct/complete answers. Only clarify specific details if I am off track or incorrect, alternatively, ask another question to clarify my understanding.
-`;
+	const initialPrompt = `Acting as an expert in diagnostic questioning and computer adaptive testing, assess my knowledge of ${topic}. Start at the 'Unistructural' level using SOLO Taxonomy. Adjust questions based on my proficiency. After each response, evaluate my answer, provide direct feedback, and either ask the next question or rephrase the current one.`;
 
 	const [chatGPTQuestion, setChatGPTQuestion] = useState('');
 	const [answer, setAnswer] = useState('');
 	const [feedback, setFeedback] = useState('');
 	const [incorrectCount, setIncorrectCount] = useState(0); // Track incorrect answers
-	const [currentLevel, setCurrentLevel] = useState('Prestructural'); // Default to Prestructural
+	const [currentLevel, setCurrentLevel] = useState('Unistructural');
 
 	useEffect(() => {
 		axios
@@ -51,7 +40,6 @@ Keep your questions direct, with limited unnecessary dialogue around the line of
 	}, [initialPrompt, currentLevel]);
 
 	const handleSubmit = () => {
-		console.log(currentLevel);
 		axios
 			.post('http://localhost:8000/api/evaluate', {
 				answer,
@@ -61,12 +49,12 @@ Keep your questions direct, with limited unnecessary dialogue around the line of
 			.then((response) => {
 				const isCorrect = response.data.isCorrect;
 				const nextQuestion = response.data.nextQuestion;
-				const nextLevel = response.data.nextLevel; // This should be returned from the backend
+				const nextLevel = response.data.nextLevel;
 
 				if (isCorrect) {
-					setFeedback('Correct!');
+					setFeedback('Correct! Moving to the next question.');
 					setIncorrectCount(0);
-					setCurrentLevel(nextLevel); // Update the level based on feedback
+					setCurrentLevel(nextLevel);
 					setChatGPTQuestion(nextQuestion);
 				} else {
 					setFeedback('Incorrect.');
