@@ -10,19 +10,14 @@ const InteractionPage = () => {
 	const navigate = useNavigate();
 	const { subject, yearLevel, topic, selectedPrompt } = location.state || {};
 
-	// KIOSK mode: Enter fullscreen when the component mounts
 	useEffect(() => {
 		enterFullScreen();
-
-		// Cleanup: Exit fullscreen when the component unmounts
 		return () => {
 			exitFullScreen();
 		};
 	}, []);
 
-	const initialPrompt = `Acting as an expert in diagnostic questioning and computer adaptive testing, please assess my knowledge and understanding of ${topic}. ${selectedPrompt}. Ask me one question at a time to measure my level of understanding, use SOLO Taxonomy as a framework with a mastery learning approach. 
-
-Start at the 'Unistructural' level and continue asking questions at this level until I demonstrate strong proficiency and sophistication in my responses. 
+	const initialPrompt = `Acting as an expert in diagnostic questioning and computer adaptive testing, please assess my knowledge and understanding of ${topic}. ${selectedPrompt}. Ask me one question at a time to measure my level of understanding, use SOLO Taxonomy as a framework with a mastery learning approach. Start at the 'Unistructural' level and continue asking questions at this level until I demonstrate strong proficiency and sophistication in my responses. 
 
 Only move to the next level once I've answered multiple questions of each level and shown the necessary proficiency to level up. If I have not demonstrated enough understanding of a concept or idea, ask me a specific follow-up question on the same content.
 
@@ -37,75 +32,75 @@ Keep your questions direct, with limited unnecessary dialogue around the line of
 
 	const [chatGPTQuestion, setChatGPTQuestion] = useState('');
 	const [answer, setAnswer] = useState('');
-	const [helperPrompts, setHelperPrompts] = useState([]);
-	const [feedback, setFeedback] = useState(''); // For feedback text
-	const [response, setResponse] = useState(''); // For next question
+	const [feedback, setFeedback] = useState('');
+	const [incorrectCount, setIncorrectCount] = useState(0); // Track incorrect answers
+	const [currentLevel, setCurrentLevel] = useState('Prestructural'); // Default to Prestructural
 
-	// Fetch the question and helper prompts from the backend
 	useEffect(() => {
 		axios
-			.post('http://localhost:8000/api/start', { prompt: initialPrompt })
+			.post('http://localhost:8000/api/start', {
+				prompt: initialPrompt,
+				currentLevel,
+			})
 			.then((response) => {
 				setChatGPTQuestion(response.data.question);
-				setHelperPrompts(response.data.helperPrompts);
 			})
 			.catch((error) => {
 				console.error('Error fetching the question:', error);
 			});
-	}, [initialPrompt]);
+	}, [initialPrompt, currentLevel]);
 
 	const handleSubmit = () => {
+		console.log(currentLevel);
 		axios
 			.post('http://localhost:8000/api/evaluate', {
 				answer,
 				initialPrompt,
+				currentLevel,
 			})
 			.then((response) => {
-				console.log('Full response:', response.data); // Log the full response for each evaluation
+				const isCorrect = response.data.isCorrect;
+				const nextQuestion = response.data.nextQuestion;
+				const nextLevel = response.data.nextLevel; // This should be returned from the backend
 
-				const feedbackText = response.data.feedback;
-				let nextQuestion = response.data.nextQuestion;
-
-				console.log('Feedback:', feedbackText);
-				console.log('Next Question:', nextQuestion);
-
-				// Ensure feedback is displayed
-				if (feedbackText) {
-					setFeedback(feedbackText);
-				} else {
-					console.warn('Feedback not provided:', response.data);
-					setFeedback('No feedback provided.');
-				}
-
-				// Handle logic for continuing at the same SOLO level
-				if (
-					feedbackText.includes('No proficiency shown') ||
-					feedbackText.includes('to progress to the next level')
-				) {
-					// If feedback indicates not enough proficiency for the next level, continue with the same question
-					setChatGPTQuestion(
-						'Please provide more details or demonstrate a deeper understanding at the current level.'
-					);
-				} else if (
-					nextQuestion &&
-					nextQuestion !== 'No next question available.'
-				) {
-					// If there's a valid next question, set it
+				if (isCorrect) {
+					setFeedback('Correct!');
+					setIncorrectCount(0);
+					setCurrentLevel(nextLevel); // Update the level based on feedback
 					setChatGPTQuestion(nextQuestion);
 				} else {
-					// If there's no next question available, provide feedback instead
-					setChatGPTQuestion(
-						'No next question available. Please review the feedback.'
-					);
+					setFeedback('Incorrect.');
+					const newCount = incorrectCount + 1;
+					setIncorrectCount(newCount);
+
+					if (newCount >= 3) {
+						setChatGPTQuestion(
+							`You have answered incorrectly 3 times. Please study the topic "${topic}" further and try again.`
+						);
+					} else {
+						axios
+							.post('http://localhost:8000/api/rephrase', {
+								currentQuestion: chatGPTQuestion,
+							})
+							.then((res) => {
+								setChatGPTQuestion(res.data.rephrasedQuestion);
+							})
+							.catch((err) => {
+								console.error(
+									'Error rephrasing question:',
+									err
+								);
+								setChatGPTQuestion(
+									'Unable to rephrase the question at the moment.'
+								);
+							});
+					}
 				}
 			})
 			.catch((error) => {
 				console.error('Error evaluating answer:', error);
 				setFeedback(
 					'An error occurred while processing your response.'
-				);
-				setChatGPTQuestion(
-					'No next question available due to an error.'
 				);
 			});
 	};
@@ -115,32 +110,21 @@ Keep your questions direct, with limited unnecessary dialogue around the line of
 			<h1>Selected Prompt: {selectedPrompt || 'No prompt selected!'}</h1>
 			<ChatSession initialPrompt={initialPrompt} />
 			<div className="feedback-section">
-				{/* Display the feedback text */}
 				<p>{feedback}</p>
 			</div>
 			<div className="question-container">
-				{/* The question text in the output box */}
 				<textarea
 					className="output-box"
 					readOnly
 					value={chatGPTQuestion}
 				/>
 			</div>
-			<div className="helper-prompts">
-				<h3>Helpful Prompts</h3>
-				<ul>
-					{helperPrompts.map((prompt, index) => (
-						<li key={index}>{prompt}</li>
-					))}
-				</ul>
-			</div>
 			<div className="answer-input">
-				{/* Single input box for user answer */}
 				<textarea
 					value={answer}
 					onChange={(e) => setAnswer(e.target.value)}
 					placeholder="Type your answer here"
-					onPaste={(e) => e.preventDefault()} // Disable paste functionality
+					onPaste={(e) => e.preventDefault()}
 				/>
 				<button onClick={handleSubmit}>Submit Answer</button>
 			</div>
