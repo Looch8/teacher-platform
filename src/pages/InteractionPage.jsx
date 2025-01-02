@@ -196,9 +196,4 @@ export default InteractionPage;
 // 2nd Button - I can't remember - remind me. Short, concise information.
 // 3rd Button - We didn't learn that - Goes to another topic
 
-// Features to focus on
-// Scrolling feature of entire conversation. The students answers should be in the output box. plus the chat gpt's question. Student's answers in one color, chat GPT questions in another question.
-
-// Web hosting
-
 // Teacher can upload a CSV with concepts, and then the chat GPT will ask questions based on that.
