@@ -9,9 +9,12 @@ const ChatSession = ({ initialPrompt }) => {
 	useEffect(() => {
 		if (initialPrompt) {
 			axios
-				.post('http://localhost:8000/api/start', {
-					prompt: initialPrompt,
-				})
+				.post(
+					'https://teacher-platform-backend-production.up.railway.app/api/start',
+					{
+						prompt: initialPrompt,
+					}
+				)
 				.then((response) => {
 					setChatGPTQuestion(response.data.question);
 					setHelperPrompts(response.data.helperPrompts);
