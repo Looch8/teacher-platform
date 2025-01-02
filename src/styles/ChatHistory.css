@@ -1,0 +1,27 @@
+.chat-history {
+	height: 400px;
+	overflow-y: auto;
+	border: 1px solid #ccc;
+	padding: 10px;
+	background-color: #f9f9f9;
+	border-radius: 5px;
+}
+
+.chat-message {
+	margin-bottom: 10px;
+	padding: 8px;
+	border-radius: 5px;
+	word-wrap: break-word;
+}
+
+.student-message {
+	background-color: #d1e7dd;
+	color: #0f5132;
+	align-self: flex-end;
+}
+
+.chatgpt-message {
+	background-color: #cff4fc;
+	color: #055160;
+	align-self: flex-start;
+}

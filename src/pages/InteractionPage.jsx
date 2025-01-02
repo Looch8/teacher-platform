@@ -3,6 +3,7 @@ import { useLocation, useNavigate } from 'react-router-dom';
 import axios from 'axios';
 import '../styles/InteractionPage.css';
 import ChatSession from '../components/ChatSession';
+import ChatHistory from '../components/ChatHistory';
 import { enterFullScreen, exitFullScreen } from '../utils/fullscreen';
 
 const InteractionPage = () => {
@@ -22,9 +23,11 @@ const InteractionPage = () => {
 	const [chatGPTQuestion, setChatGPTQuestion] = useState('');
 	const [answer, setAnswer] = useState('');
 	const [feedback, setFeedback] = useState('');
-	const [incorrectCount, setIncorrectCount] = useState(0); // Track incorrect answers
+	const [incorrectCount, setIncorrectCount] = useState(0);
+	const [conversation, setConversation] = useState([]); // Track incorrect answers
 	const [currentLevel, setCurrentLevel] = useState('Unistructural');
 
+	// Fetch initial question
 	useEffect(() => {
 		axios
 			.post('http://localhost:8000/api/start', {
@@ -32,14 +35,27 @@ const InteractionPage = () => {
 				currentLevel,
 			})
 			.then((response) => {
-				setChatGPTQuestion(response.data.question);
+				const initialQuestion = response.data.question;
+				setChatGPTQuestion(initialQuestion);
+
+				// Add the initial question to the conversation history
+				setConversation((prev) => [
+					...prev,
+					{ sender: 'chatgpt', content: initialQuestion },
+				]);
 			})
 			.catch((error) => {
 				console.error('Error fetching the question:', error);
 			});
 	}, [initialPrompt, currentLevel]);
 
+	// Handle answer submission
 	const handleSubmit = () => {
+		setConversation((prev) => [
+			...prev,
+			{ sender: 'student', content: answer },
+		]);
+
 		axios
 			.post('http://localhost:8000/api/evaluate', {
 				answer,
@@ -56,22 +72,53 @@ const InteractionPage = () => {
 					setIncorrectCount(0);
 					setCurrentLevel(nextLevel);
 					setChatGPTQuestion(nextQuestion);
+
+					// Add feedback and next question to the conversation
+					setConversation((prev) => [
+						...prev,
+						{
+							sender: 'chatgpt',
+							content: 'Correct! Moving to the next question.',
+						},
+						{ sender: 'chatgpt', content: nextQuestion },
+					]);
 				} else {
 					setFeedback('Incorrect.');
 					const newCount = incorrectCount + 1;
 					setIncorrectCount(newCount);
 
 					if (newCount >= 3) {
-						setChatGPTQuestion(
-							`You have answered incorrectly 3 times. Please study the topic "${topic}" further and try again.`
-						);
+						const retryMessage = `You have answered incorrectly 3 times. Please study the topic "${topic}" further and try again.`;
+						setChatGPTQuestion(retryMessage);
+
+						// Add retry message to the conversation
+						setConversation((prev) => [
+							...prev,
+							{ sender: 'chatgpt', content: retryMessage },
+						]);
 					} else {
 						axios
 							.post('http://localhost:8000/api/rephrase', {
 								currentQuestion: chatGPTQuestion,
 							})
 							.then((res) => {
-								setChatGPTQuestion(res.data.rephrasedQuestion);
+								const rephrasedQuestion =
+									res.data.rephrasedQuestion;
+								setChatGPTQuestion(rephrasedQuestion);
+
+								// Add feedback and rephrased question to the conversation
+								setConversation((prev) => [
+									...prev,
+									{
+										sender: 'chatgpt',
+										content:
+											'Incorrect. Rephrasing the question...',
+									},
+									{
+										sender: 'chatgpt',
+										content: rephrasedQuestion,
+									},
+								]);
 							})
 							.catch((err) => {
 								console.error(
@@ -91,21 +138,20 @@ const InteractionPage = () => {
 					'An error occurred while processing your response.'
 				);
 			});
+
+		setAnswer(''); // Clear the input
 	};
 
 	return (
 		<div className="prompt-interaction-container">
 			<h1>Selected Prompt: {selectedPrompt || 'No prompt selected!'}</h1>
 			<ChatSession initialPrompt={initialPrompt} />
+
+			{/* Chat History Component */}
+			<ChatHistory conversation={conversation} />
+
 			<div className="feedback-section">
 				<p>{feedback}</p>
-			</div>
-			<div className="question-container">
-				<textarea
-					className="output-box"
-					readOnly
-					value={chatGPTQuestion}
-				/>
 			</div>
 			<div className="answer-input">
 				<textarea
