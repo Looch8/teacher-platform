@@ -22,9 +22,8 @@ const InteractionPage = () => {
 
 	const [chatGPTQuestion, setChatGPTQuestion] = useState('');
 	const [answer, setAnswer] = useState('');
-	const [feedback, setFeedback] = useState('');
 	const [incorrectCount, setIncorrectCount] = useState(0);
-	const [conversation, setConversation] = useState([]); // Track incorrect answers
+	const [conversation, setConversation] = useState([]); // Track conversation
 	const [currentLevel, setCurrentLevel] = useState('Unistructural');
 	const hasFetchedInitialQuestion = useRef(false); // Prevent multiple fetches
 
@@ -34,10 +33,13 @@ const InteractionPage = () => {
 			hasFetchedInitialQuestion.current = true; // Set flag to prevent re-fetch
 
 			axios
-				.post('http://localhost:8000/api/start', {
-					prompt: initialPrompt,
-					currentLevel,
-				})
+				.post(
+					'https://teacher-platform-backend-production.up.railway.app/api/start',
+					{
+						prompt: initialPrompt,
+						currentLevel,
+					}
+				)
 				.then((response) => {
 					const initialQuestion = response.data.question;
 					setChatGPTQuestion(initialQuestion);
@@ -62,18 +64,20 @@ const InteractionPage = () => {
 		]);
 
 		axios
-			.post('http://localhost:8000/api/evaluate', {
-				answer,
-				initialPrompt,
-				currentLevel,
-			})
+			.post(
+				'https://teacher-platform-backend-production.up.railway.app/api/evaluate',
+				{
+					answer,
+					initialPrompt,
+					currentLevel,
+				}
+			)
 			.then((response) => {
 				const isCorrect = response.data.isCorrect;
 				const nextQuestion = response.data.nextQuestion;
 				const nextLevel = response.data.nextLevel;
 
 				if (isCorrect) {
-					setFeedback('Correct! Moving to the next question.');
 					setIncorrectCount(0);
 					setCurrentLevel(nextLevel);
 					setChatGPTQuestion(nextQuestion);
@@ -88,7 +92,6 @@ const InteractionPage = () => {
 						{ sender: 'chatgpt', content: nextQuestion },
 					]);
 				} else {
-					setFeedback('Incorrect.');
 					const newCount = incorrectCount + 1;
 					setIncorrectCount(newCount);
 
@@ -103,9 +106,12 @@ const InteractionPage = () => {
 						]);
 					} else {
 						axios
-							.post('http://localhost:8000/api/rephrase', {
-								currentQuestion: chatGPTQuestion,
-							})
+							.post(
+								'https://teacher-platform-backend-production.up.railway.app/api/rephrase',
+								{
+									currentQuestion: chatGPTQuestion,
+								}
+							)
 							.then((res) => {
 								const rephrasedQuestion =
 									res.data.rephrasedQuestion;
@@ -139,9 +145,14 @@ const InteractionPage = () => {
 			})
 			.catch((error) => {
 				console.error('Error evaluating answer:', error);
-				setFeedback(
-					'An error occurred while processing your response.'
-				);
+				setConversation((prev) => [
+					...prev,
+					{
+						sender: 'chatgpt',
+						content:
+							'An error occurred while processing your response.',
+					},
+				]);
 			});
 
 		setAnswer(''); // Clear the input
@@ -155,9 +166,6 @@ const InteractionPage = () => {
 			{/* Chat History Component */}
 			<ChatHistory conversation={conversation} />
 
-			<div className="feedback-section">
-				<p>{feedback}</p>
-			</div>
 			<div className="answer-input">
 				<textarea
 					value={answer}
