@@ -1,4 +1,4 @@
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useRef } from 'react';
 import { useLocation, useNavigate } from 'react-router-dom';
 import axios from 'axios';
 import '../styles/InteractionPage.css';
@@ -26,27 +26,32 @@ const InteractionPage = () => {
 	const [incorrectCount, setIncorrectCount] = useState(0);
 	const [conversation, setConversation] = useState([]); // Track incorrect answers
 	const [currentLevel, setCurrentLevel] = useState('Unistructural');
+	const hasFetchedInitialQuestion = useRef(false); // Prevent multiple fetches
 
-	// Fetch initial question
+	// Fetch initial question only once
 	useEffect(() => {
-		axios
-			.post('http://localhost:8000/api/start', {
-				prompt: initialPrompt,
-				currentLevel,
-			})
-			.then((response) => {
-				const initialQuestion = response.data.question;
-				setChatGPTQuestion(initialQuestion);
+		if (!hasFetchedInitialQuestion.current) {
+			hasFetchedInitialQuestion.current = true; // Set flag to prevent re-fetch
 
-				// Add the initial question to the conversation history
-				setConversation((prev) => [
-					...prev,
-					{ sender: 'chatgpt', content: initialQuestion },
-				]);
-			})
-			.catch((error) => {
-				console.error('Error fetching the question:', error);
-			});
+			axios
+				.post('http://localhost:8000/api/start', {
+					prompt: initialPrompt,
+					currentLevel,
+				})
+				.then((response) => {
+					const initialQuestion = response.data.question;
+					setChatGPTQuestion(initialQuestion);
+
+					// Add the initial question to the conversation history
+					setConversation((prev) => [
+						...prev,
+						{ sender: 'chatgpt', content: initialQuestion },
+					]);
+				})
+				.catch((error) => {
+					console.error('Error fetching the question:', error);
+				});
+		}
 	}, [initialPrompt, currentLevel]);
 
 	// Handle answer submission
