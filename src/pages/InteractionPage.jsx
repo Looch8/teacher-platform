@@ -18,7 +18,7 @@ const InteractionPage = () => {
 		};
 	}, []);
 
-	const initialPrompt = `Acting as an expert in diagnostic questioning and computer adaptive testing, assess my knowledge of ${topic}. Start at the 'Unistructural' level using BlOOM Taxonomy. Adjust questions based on my proficiency. After each response, evaluate my answer, provide direct feedback, and either ask the next question or rephrase the current one.`;
+	const initialPrompt = `Acting as an expert in diagnostic questioning and computer adaptive testing, assess my knowledge of ${topic}. Start at the 'Unistructural' level using SOLO Taxonomy. Adjust questions based on my proficiency. After each response, evaluate my answer, provide direct feedback, and either ask the next question or rephrase the current one.`;
 
 	const [chatGPTQuestion, setChatGPTQuestion] = useState('');
 	const [answer, setAnswer] = useState('');
@@ -123,7 +123,6 @@ const InteractionPage = () => {
 };
 
 export default InteractionPage;
-
 // Features - meeting with Adrian
 
 //  Ready by 22nd or 23rd to present.
