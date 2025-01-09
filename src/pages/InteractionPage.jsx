@@ -18,7 +18,7 @@ const InteractionPage = () => {
 		};
 	}, []);
 
-	const initialPrompt = `Acting as an expert in diagnostic questioning and computer adaptive testing, assess my knowledge of ${topic}. Start at the 'Unistructural' level using SOLO Taxonomy. Adjust questions based on my proficiency. After each response, evaluate my answer, provide direct feedback, and either ask the next question or rephrase the current one.`;
+	const initialPrompt = `Acting as an expert in diagnostic questioning and computer adaptive testing, assess my knowledge of ${topic}. Start at the 'Unistructural' level using BlOOM Taxonomy. Adjust questions based on my proficiency. After each response, evaluate my answer, provide direct feedback, and either ask the next question or rephrase the current one.`;
 
 	const [chatGPTQuestion, setChatGPTQuestion] = useState('');
 	const [answer, setAnswer] = useState('');
@@ -73,75 +73,18 @@ const InteractionPage = () => {
 				}
 			)
 			.then((response) => {
-				const isCorrect = response.data.isCorrect;
-				const nextQuestion = response.data.nextQuestion;
-				const nextLevel = response.data.nextLevel;
+				const { isCorrect, feedback, nextQuestion, nextLevel } =
+					response.data;
 
-				if (isCorrect) {
-					setIncorrectCount(0);
-					setCurrentLevel(nextLevel);
-					setChatGPTQuestion(nextQuestion);
+				setCurrentLevel(nextLevel);
+				setChatGPTQuestion(nextQuestion);
 
-					// Add feedback and next question to the conversation
-					setConversation((prev) => [
-						...prev,
-						{
-							sender: 'chatgpt',
-							content: 'Correct! Moving to the next question.',
-						},
-						{ sender: 'chatgpt', content: nextQuestion },
-					]);
-				} else {
-					const newCount = incorrectCount + 1;
-					setIncorrectCount(newCount);
-
-					if (newCount >= 3) {
-						const retryMessage = `You have answered incorrectly 3 times. Please study the topic "${topic}" further and try again.`;
-						setChatGPTQuestion(retryMessage);
-
-						// Add retry message to the conversation
-						setConversation((prev) => [
-							...prev,
-							{ sender: 'chatgpt', content: retryMessage },
-						]);
-					} else {
-						axios
-							.post(
-								'https://teacher-platform-backend-production.up.railway.app/api/rephrase',
-								{
-									currentQuestion: chatGPTQuestion,
-								}
-							)
-							.then((res) => {
-								const rephrasedQuestion =
-									res.data.rephrasedQuestion;
-								setChatGPTQuestion(rephrasedQuestion);
-
-								// Add feedback and rephrased question to the conversation
-								setConversation((prev) => [
-									...prev,
-									{
-										sender: 'chatgpt',
-										content:
-											'Incorrect. Rephrasing the question...',
-									},
-									{
-										sender: 'chatgpt',
-										content: rephrasedQuestion,
-									},
-								]);
-							})
-							.catch((err) => {
-								console.error(
-									'Error rephrasing question:',
-									err
-								);
-								setChatGPTQuestion(
-									'Unable to rephrase the question at the moment.'
-								);
-							});
-					}
-				}
+				// Add feedback and next question to the conversation dynamically
+				setConversation((prev) => [
+					...prev,
+					{ sender: 'chatgpt', content: feedback },
+					{ sender: 'chatgpt', content: nextQuestion },
+				]);
 			})
 			.catch((error) => {
 				console.error('Error evaluating answer:', error);
