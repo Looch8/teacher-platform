@@ -121,13 +121,11 @@ Never, at any time, state each Blooms level during the conversation, instead sub
 				}
 			)
 			.then((response) => {
-				const { isCorrect, feedback, nextQuestion, nextLevel } =
-					response.data;
+				const { feedback, nextQuestion, nextLevel } = response.data;
 
-				setCurrentLevel(nextLevel);
+				setCurrentLevel(nextLevel); // Update to the next level dynamically
 				setChatGPTQuestion(nextQuestion);
 
-				// Add feedback and next question to the conversation dynamically
 				setConversation((prev) => [
 					...prev,
 					{ sender: 'chatgpt', content: feedback },
