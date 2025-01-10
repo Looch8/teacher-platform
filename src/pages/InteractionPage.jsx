@@ -11,12 +11,17 @@ const InteractionPage = () => {
 	const navigate = useNavigate();
 	const { subject, yearLevel, topic, selectedPrompt } = location.state || {};
 
+	const API_URL = import.meta.env.VITE_API_URL;
+
+	// Full screen on load
 	useEffect(() => {
 		enterFullScreen();
 		return () => {
 			exitFullScreen();
 		};
 	}, []);
+
+	//API call for backend local
 
 	const initialPrompt = `Acting as an expert in Socratic questioning and computer adaptive testing, please assess my knowledge and understanding of the causes of ${topic}.
 
@@ -73,7 +78,13 @@ Never, at any time, state each Blooms level during the conversation, instead sub
 	const [incorrectCount, setIncorrectCount] = useState(0);
 	const [conversation, setConversation] = useState([]); // Track conversation
 	const [currentLevel, setCurrentLevel] = useState('Unistructural');
+	const [error, setError] = useState(null);
 	const hasFetchedInitialQuestion = useRef(false); // Prevent multiple fetches
+
+	//Add debugging log
+	useEffect(() => {
+		console.log('API_URL:', API_URL);
+	}, [API_URL]);
 
 	// Fetch initial question only once
 	useEffect(() => {
@@ -82,7 +93,8 @@ Never, at any time, state each Blooms level during the conversation, instead sub
 
 			axios
 				.post(
-					'https://teacher-platform-backend-production.up.railway.app/api/start',
+					// 'https://teacher-platform-backend-production.up.railway.app/api/start',
+					`${API_URL}/start`,
 					{
 						prompt: initialPrompt,
 						currentLevel,
@@ -102,7 +114,7 @@ Never, at any time, state each Blooms level during the conversation, instead sub
 					console.error('Error fetching the question:', error);
 				});
 		}
-	}, [initialPrompt, currentLevel]);
+	}, [initialPrompt, currentLevel, API_URL]);
 
 	// Handle answer submission
 	const handleSubmit = () => {
@@ -113,7 +125,8 @@ Never, at any time, state each Blooms level during the conversation, instead sub
 
 		axios
 			.post(
-				'https://teacher-platform-backend-production.up.railway.app/api/evaluate',
+				// 'https://teacher-platform-backend-production.up.railway.app/api/evaluate',
+				`${API_URL}/evaluate`,
 				{
 					answer,
 					initialPrompt,
