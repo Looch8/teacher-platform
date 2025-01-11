@@ -15,14 +15,37 @@ function PromptPage() {
 					'End of WW1',
 				],
 			},
+			'Year 9': {
+				'World War II': ['Causes of WW2', 'Key battles', 'End of WW2'],
+			},
+			'Year 10': {
+				Renaissance: ['Art', 'Science', 'Politics'],
+			},
 		},
-		Math: {
+		Science: {
 			'Year 8': {
-				Algebra: [
-					'Linear equations',
-					'Quadratic equations',
-					'Graphing',
+				'Basic Biology': ['Cells', 'Genetics', 'Evolution'],
+			},
+			'Year 9': {
+				'Chemical Reactions': [
+					'Acids and bases',
+					'Combustion',
+					'Oxidation',
 				],
+			},
+			'Year 10': {
+				'Physics of Motion': ['Forces', 'Energy', 'Momentum'],
+			},
+		},
+		English: {
+			'Year 8': {
+				Poetry: ['Sonnet', 'Haiku', 'Limerick'],
+			},
+			'Year 9': {
+				Grammar: ['Nouns', 'Verbs', 'Adjectives'],
+			},
+			'Year 10': {
+				Shakespeare: ['Macbeth', 'Romeo and Juliet', 'Hamlet'],
 			},
 		},
 	};
