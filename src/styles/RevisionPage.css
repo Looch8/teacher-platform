@@ -72,11 +72,14 @@
 /* Selections display styling */
 .selections p {
 	font-size: 16px;
-	margin: 5px 0;
+	margin: 10px 0;
 	font-weight: bold;
 	color: #333;
 }
 
+.selections > P > span {
+	font-style: italic;
+}
 /* Submit button styling */
 .submit-button {
 	padding: 10px 20px;

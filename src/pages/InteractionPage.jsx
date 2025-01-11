@@ -162,7 +162,7 @@ Never, at any time, state each Blooms level during the conversation, instead sub
 
 	return (
 		<div className="prompt-interaction-container">
-			<h1>Selected Prompt: {selectedPrompt || 'No prompt selected!'}</h1>
+			<h1>{selectedPrompt || 'No prompt selected!'}</h1>
 			<ChatSession initialPrompt={initialPrompt} />
 
 			{/* Chat History Component */}
@@ -172,7 +172,7 @@ Never, at any time, state each Blooms level during the conversation, instead sub
 				<textarea
 					value={answer}
 					onChange={(e) => setAnswer(e.target.value)}
-					placeholder="Type your answer here"
+					placeholder="Type your response here"
 					onPaste={(e) => e.preventDefault()}
 				/>
 				<button onClick={handleSubmit}>Submit Answer</button>
@@ -182,11 +182,7 @@ Never, at any time, state each Blooms level during the conversation, instead sub
 };
 
 export default InteractionPage;
-// Features - meeting with Adrian
 
-//  Ready by 22nd or 23rd to present.
-//  Change feedback to not say the level we are on - just level 1, or level 2 etc, and tell them when it levels up.
-//  Keep entire conversation in the output box.
 //  Add a button to restart the conversation.
 
 //
