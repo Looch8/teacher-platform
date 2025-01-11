@@ -9,7 +9,7 @@ import { enterFullScreen, exitFullScreen } from '../utils/fullscreen';
 const InteractionPage = () => {
 	const location = useLocation();
 	const navigate = useNavigate();
-	const { subject, yearLevel, topic, selectedPrompt } = location.state || {};
+	const { selectedPrompt } = location.state || {};
 
 	const API_URL = import.meta.env.VITE_API_URL;
 
