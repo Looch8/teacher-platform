@@ -23,7 +23,7 @@ const InteractionPage = () => {
 
 	//API call for backend local
 
-	const initialPrompt = `Acting as an expert in Socratic questioning and computer adaptive testing, please assess my knowledge and understanding of the causes of ${topic}.
+	const initialPrompt = `Acting as an expert in Socratic questioning and computer adaptive testing, please assess my knowledge and understanding of ${selectedPrompt}.
 
  
 
