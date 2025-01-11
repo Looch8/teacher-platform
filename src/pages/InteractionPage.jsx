@@ -174,8 +174,16 @@ Never, at any time, state each Blooms level during the conversation, instead sub
 					onChange={(e) => setAnswer(e.target.value)}
 					placeholder="Type your response here"
 					onPaste={(e) => e.preventDefault()}
+					onKeyDown={(e) => {
+						if (e.key === 'Enter' && !e.shiftKey) {
+							e.preventDefault();
+							handleSubmit();
+						}
+					}}
 				/>
-				<button onClick={handleSubmit}>Submit Answer</button>
+				<button className="submit-arrow" onClick={handleSubmit}>
+					<span style={{ fontFamily: 'Wingdings' }}>&#x2192;</span>
+				</button>
 			</div>
 		</div>
 	);

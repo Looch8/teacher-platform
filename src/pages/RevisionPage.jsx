@@ -66,7 +66,7 @@ function RevisionPage() {
 		<>
 			<BackButton />
 			<HomeButton />
-			<h1>Revision Mode</h1>
+			<h1>Assessment Mode</h1>
 			<div className="dropdown-container">
 				<Dropdown
 					label="Subject"
