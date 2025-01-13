@@ -2,7 +2,7 @@ import { useState, useEffect, useRef } from 'react';
 import { useLocation, useNavigate } from 'react-router-dom';
 import axios from 'axios';
 import '../styles/InteractionPage.css';
-import ChatSession from '../components/ChatSession';
+// import ChatSession from '../components/ChatSession';
 import ChatHistory from '../components/ChatHistory';
 import { enterFullScreen, exitFullScreen } from '../utils/fullscreen';
 
@@ -82,92 +82,92 @@ Never, at any time, state each Blooms level during the conversation, instead sub
 	const hasFetchedInitialQuestion = useRef(false); // Prevent multiple fetches
 	const [isTyping, setIsTyping] = useState(false);
 
-	//Add debugging log
-	useEffect(() => {
-		console.log('API_URL:', API_URL);
-	}, [API_URL]);
-
 	// Fetch initial question only once
 	useEffect(() => {
 		if (!hasFetchedInitialQuestion.current) {
-			hasFetchedInitialQuestion.current = true; // Set flag to prevent re-fetch
+			hasFetchedInitialQuestion.current = true;
 
-			axios
-				.post(
-					// 'https://teacher-platform-backend-production.up.railway.app/api/start',
-					`${API_URL}/start`,
-					{
+			const fetchInitialQuestion = async () => {
+				try {
+					const response = await axios.post(`${API_URL}/start`, {
 						prompt: initialPrompt,
 						currentLevel,
-					}
-				)
-				.then((response) => {
+					});
+
 					const initialQuestion = response.data.question;
 					setChatGPTQuestion(initialQuestion);
 
-					// Add the initial question to the conversation history
-					setConversation((prev) => [
-						...prev,
+					setConversation([
 						{ sender: 'chatgpt', content: initialQuestion },
 					]);
-				})
-				.catch((error) => {
+				} catch (error) {
 					console.error('Error fetching the question:', error);
-				});
+				}
+			};
+
+			fetchInitialQuestion();
 		}
-	}, [initialPrompt, currentLevel, API_URL]);
+	}, []); // Empty dependency array prevents re-triggering
 
 	// Handle answer submission
 	const handleSubmit = () => {
-		setIsTyping(true); // Set typing indicator to true when starting API call
+		if (!answer.trim() || isTyping) return;
+
+		setIsTyping(true);
+
 		setConversation((prev) => [
 			...prev,
 			{ sender: 'student', content: answer },
 		]);
 
-		axios
-			.post(
-				// 'https://teacher-platform-backend-production.up.railway.app/api/evaluate',
-				`${API_URL}/evaluate`,
-				{
-					answer,
+		const evaluateAnswer = async () => {
+			try {
+				const response = await axios.post(`${API_URL}/evaluate`, {
+					messages: [
+						{ role: 'system', content: initialPrompt },
+						...conversation.map((msg) => ({
+							role:
+								msg.sender === 'student' ? 'user' : 'assistant',
+							content: msg.content,
+						})),
+						{ role: 'user', content: answer },
+					],
 					initialPrompt,
 					currentLevel,
-				}
-			)
-			.then((response) => {
+				});
+
 				const { feedback, nextQuestion, nextLevel } = response.data;
 
-				setCurrentLevel(nextLevel); // Update to the next level dynamically
-				setChatGPTQuestion(nextQuestion);
+				setCurrentLevel(nextLevel);
 
 				setConversation((prev) => [
 					...prev,
 					{ sender: 'chatgpt', content: feedback },
 					{ sender: 'chatgpt', content: nextQuestion },
 				]);
-				setIsTyping(false); // Set typing indicator to false after API call
-			})
-			.catch((error) => {
+
+				setIsTyping(false);
+			} catch (error) {
 				console.error('Error evaluating answer:', error);
 				setConversation((prev) => [
 					...prev,
 					{
 						sender: 'chatgpt',
 						content:
-							'An error occurred while processing your response.',
+							'Error processing your response. Please try again later.',
 					},
 				]);
-				setIsTyping(false); // Hide indicator on error
-			});
+				setIsTyping(false);
+			}
+		};
 
-		setAnswer(''); // Clear the input
+		evaluateAnswer();
+		setAnswer('');
 	};
 
 	return (
 		<div className="prompt-interaction-container">
 			<h1>{selectedPrompt || 'No prompt selected!'}</h1>
-			<ChatSession initialPrompt={initialPrompt} />
 
 			{/* Chat History Component */}
 			<ChatHistory conversation={conversation} isTyping={isTyping} />
