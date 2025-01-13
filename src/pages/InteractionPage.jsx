@@ -126,11 +126,10 @@ Never, at any time, state each Blooms level during the conversation, instead sub
 					messages: [
 						{ role: 'system', content: initialPrompt },
 						...conversation.map((msg) => ({
-							role:
-								msg.sender === 'student' ? 'user' : 'assistant',
+							sender: msg.sender,
 							content: msg.content,
 						})),
-						{ role: 'user', content: answer },
+						{ sender: 'student', content: answer }, // ✅ Latest answer added
 					],
 					initialPrompt,
 					currentLevel,
