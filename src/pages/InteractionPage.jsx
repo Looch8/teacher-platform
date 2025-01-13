@@ -80,6 +80,7 @@ Never, at any time, state each Blooms level during the conversation, instead sub
 	const [currentLevel, setCurrentLevel] = useState('Unistructural');
 	const [error, setError] = useState(null);
 	const hasFetchedInitialQuestion = useRef(false); // Prevent multiple fetches
+	const [isTyping, setIsTyping] = useState(false);
 
 	//Add debugging log
 	useEffect(() => {
@@ -118,6 +119,7 @@ Never, at any time, state each Blooms level during the conversation, instead sub
 
 	// Handle answer submission
 	const handleSubmit = () => {
+		setIsTyping(true); // Set typing indicator to true when starting API call
 		setConversation((prev) => [
 			...prev,
 			{ sender: 'student', content: answer },
@@ -144,6 +146,7 @@ Never, at any time, state each Blooms level during the conversation, instead sub
 					{ sender: 'chatgpt', content: feedback },
 					{ sender: 'chatgpt', content: nextQuestion },
 				]);
+				setIsTyping(false); // Set typing indicator to false after API call
 			})
 			.catch((error) => {
 				console.error('Error evaluating answer:', error);
@@ -155,6 +158,7 @@ Never, at any time, state each Blooms level during the conversation, instead sub
 							'An error occurred while processing your response.',
 					},
 				]);
+				setIsTyping(false); // Hide indicator on error
 			});
 
 		setAnswer(''); // Clear the input
@@ -166,7 +170,7 @@ Never, at any time, state each Blooms level during the conversation, instead sub
 			<ChatSession initialPrompt={initialPrompt} />
 
 			{/* Chat History Component */}
-			<ChatHistory conversation={conversation} />
+			<ChatHistory conversation={conversation} isTyping={isTyping} />
 
 			<div className="answer-input">
 				<textarea
