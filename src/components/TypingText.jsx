@@ -1,7 +1,8 @@
 // TypingText.jsx
 import { useState, useEffect } from 'react';
 
-const TypingText = ({ text, speed = 15, onComplete }) => {
+const TypingText = ({ text, speed = 10, onComplete }) => {
+	// lower number on speed = faster typing
 	const [displayedText, setDisplayedText] = useState('');
 
 	useEffect(() => {
