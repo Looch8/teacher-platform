@@ -59,6 +59,7 @@ button:disabled {
 	flex-direction: column;
 	gap: 20px;
 	align-items: center;
+	margin-top: 10px;
 }
 
 .mode-container button,
@@ -92,6 +93,7 @@ button:disabled {
 	justify-content: center;
 	gap: 15px;
 	margin-bottom: 30px;
+	margin-top: 10px;
 }
 
 .selections p {
