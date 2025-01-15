@@ -57,9 +57,10 @@ const InteractionPage = () => {
 			fetchInitialQuestion();
 
 			//  Show Typeform after 10 seconds
+
 			setTimeout(() => {
 				setShowTypeform(true);
-			}, 10000);
+			}, 90000);
 		}
 	}, [showModal]);
 
