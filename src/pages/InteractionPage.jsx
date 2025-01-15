@@ -9,7 +9,7 @@ import { enterFullScreen, exitFullScreen } from '../utils/fullscreen';
 const InteractionPage = () => {
 	const location = useLocation();
 	const navigate = useNavigate();
-	const { selectedPrompt } = location.state || {};
+	const { selectedPrompt, yearLevel } = location.state || {};
 
 	const API_URL = import.meta.env.VITE_API_URL;
 
@@ -92,6 +92,7 @@ Never, at any time, state each Blooms level during the conversation, instead sub
 					const response = await axios.post(`${API_URL}/start`, {
 						prompt: initialPrompt,
 						currentLevel,
+						yearLevel,
 					});
 
 					const initialQuestion = response.data.question;
@@ -129,10 +130,11 @@ Never, at any time, state each Blooms level during the conversation, instead sub
 							sender: msg.sender,
 							content: msg.content,
 						})),
-						{ sender: 'student', content: answer }, // ✅ Latest answer added
+						{ sender: 'student', content: answer },
 					],
 					initialPrompt,
 					currentLevel,
+					yearLevel,
 				});
 
 				const { feedback, nextQuestion, nextLevel } = response.data;
