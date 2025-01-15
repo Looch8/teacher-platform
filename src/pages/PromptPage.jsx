@@ -9,43 +9,51 @@ function PromptPage() {
 	const promptsData = {
 		History: {
 			'Year 8': {
-				'World War I': [
-					'Causes of WW1',
-					'Wartime technology',
-					'End of WW1',
+				'Medieval Europe': [
+					'the Black Death and its effects on Medieval society and feudal structures',
 				],
 			},
 			'Year 9': {
-				'World War II': ['Causes of WW2', 'Key battles', 'End of WW2'],
+				'World War 1': ['Causes of World War 1'],
 			},
 			'Year 10': {
-				Renaissance: ['Art', 'Science', 'Politics'],
+				'World War 2': [
+					'historical justifications of dropping the bomb',
+				],
 			},
 		},
 		Science: {
 			'Year 8': {
-				'Basic Biology': ['Cells', 'Genetics', 'Evolution'],
+				Cells: [
+					'cells as the basic units of living things and the functions of specialised cell structures and organelles',
+				],
 			},
 			'Year 9': {
-				'Chemical Reactions': [
-					'Acids and bases',
-					'Combustion',
-					'Oxidation',
+				'Energy Transformation': [
+					'wave and particle models to describe energy transfer through different mediums',
 				],
 			},
 			'Year 10': {
-				'Physics of Motion': ['Forces', 'Energy', 'Momentum'],
+				'Meiosis and Mitosis': [
+					'the role of meiosis and mitosis and the function of chromosomes, DNA and genes in heredity',
+				],
 			},
 		},
 		English: {
 			'Year 8': {
-				Poetry: ['Sonnet', 'Haiku', 'Limerick'],
+				'The Giver - Lois Lowry': [
+					'Plot, themes and literary techniques used in The Giver by Lois Lowry',
+				],
 			},
 			'Year 9': {
-				Grammar: ['Nouns', 'Verbs', 'Adjectives'],
+				'Romeo & Juliet - Shakespeare': [
+					'Plot, themes and literary techniques used in Romeo & Juliet',
+				],
 			},
 			'Year 10': {
-				Shakespeare: ['Macbeth', 'Romeo and Juliet', 'Hamlet'],
+				'The Great Gatsby - F. Scott Fitzgerald': [
+					'Plot, themes and literary techniques used in The Great Gatsby by F. Scott Fitzgerald',
+				],
 			},
 		},
 	};

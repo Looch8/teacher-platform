@@ -11,19 +11,19 @@ function RevisionPage() {
 
 	const topicsData = {
 		English: {
-			'Year 8': 'Poetry',
-			'Year 9': 'Grammar',
-			'Year 10': 'Shakespeare',
+			'Year 8': 'The Giver - Lois Lowry',
+			'Year 9': 'Romeo & Juliet - Shakespeare',
+			'Year 10': 'The Great Gatsby - F. Scott Fitzgerald',
 		},
 		Science: {
-			'Year 8': 'Basic Biology',
-			'Year 9': 'Chemical Reactions',
-			'Year 10': 'Physics of Motion',
+			'Year 8': 'Cells',
+			'Year 9': 'Energy Transformation',
+			'Year 10': 'Meiosis and Mitosis',
 		},
 		History: {
-			'Year 8': 'World War I',
-			'Year 9': 'World War II',
-			'Year 10': 'Renaissance',
+			'Year 8': 'Medieval Europe',
+			'Year 9': 'World War 1',
+			'Year 10': 'World War 2',
 		},
 	};
 
@@ -58,7 +58,6 @@ function RevisionPage() {
 		});
 	};
 
-	// Get the topic for the selected subject and year level
 	const availableTopic =
 		topicsData[selectedSubject]?.[selectedYearLevel] || '';
 
@@ -81,7 +80,7 @@ function RevisionPage() {
 				/>
 				<Dropdown
 					label="Topic"
-					options={availableTopic ? [availableTopic] : []} // Only show one topic
+					options={availableTopic ? [availableTopic] : []}
 					onSelect={handleTopicSelect}
 					disabled={!selectedYearLevel}
 				/>
