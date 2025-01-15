@@ -5,6 +5,7 @@ import '../styles/InteractionPage.css';
 import ChatHistory from '../components/ChatHistory';
 import { enterFullScreen, exitFullScreen } from '../utils/fullscreen';
 import TestConditionsModal from '../components/TestConditionsModal';
+import TypeformPopup from '../components/TypeformPopup'; //
 
 const InteractionPage = () => {
 	const location = useLocation();
@@ -18,7 +19,8 @@ const InteractionPage = () => {
 	const [conversation, setConversation] = useState([]);
 	const [currentLevel, setCurrentLevel] = useState('Remembering');
 	const [isTyping, setIsTyping] = useState(false);
-	const [showModal, setShowModal] = useState(true); //
+	const [showModal, setShowModal] = useState(true);
+	const [showTypeform, setShowTypeform] = useState(false);
 
 	const hasFetchedInitialQuestion = useRef(false);
 
@@ -53,6 +55,11 @@ const InteractionPage = () => {
 			};
 
 			fetchInitialQuestion();
+
+			//  Show Typeform after 10 seconds
+			setTimeout(() => {
+				setShowTypeform(true);
+			}, 10000);
 		}
 	}, [showModal]);
 
@@ -154,6 +161,10 @@ const InteractionPage = () => {
 							</span>
 						</button>
 					</div>
+
+					{showTypeform && (
+						<TypeformPopup onClose={() => setShowTypeform(false)} />
+					)}
 				</>
 			)}
 		</div>
@@ -161,15 +172,3 @@ const InteractionPage = () => {
 };
 
 export default InteractionPage;
-
-//  Add a button to restart the conversation.
-
-//
-
-// BONUS FEATURES
-//  Helpful prompts - Should be buttons
-// 1st Button - I can't spell it - Show me with 3 words or phrases to choose from and I will identify the correct answer.
-// 2nd Button - I can't remember - remind me. Short, concise information.
-// 3rd Button - We didn't learn that - Goes to another topic
-
-// Teacher can upload a CSV with concepts, and then the chat GPT will ask questions based on that.
