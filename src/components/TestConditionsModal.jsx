@@ -4,7 +4,7 @@ const TestConditionsModal = ({ onAcknowledge }) => {
 	return (
 		<div className="modal-overlay">
 			<div className="modal-content">
-				<h2>Important Notice</h2>
+				<h2>Assessment Simulation</h2>
 				<p>
 					You are about to begin an assessment under{' '}
 					<strong>TEST CONDITIONS</strong>.
@@ -12,7 +12,8 @@ const TestConditionsModal = ({ onAcknowledge }) => {
 					Please remain in <strong>FULL-SCREEN MODE</strong>{' '}
 					throughout the test.
 					<br />
-					<strong>DO NOT</strong> close or minimize this window.
+					<strong>DO NOT</strong> close or minimise this window or you
+					will be locked out of the assessment
 				</p>
 				<button onClick={onAcknowledge} className="modal-button">
 					I Understand
