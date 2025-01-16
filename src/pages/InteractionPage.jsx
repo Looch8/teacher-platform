@@ -1,11 +1,11 @@
 import { useState, useEffect, useRef } from 'react';
 import { useLocation, useNavigate } from 'react-router-dom';
-import axios from 'axios';
 import '../styles/InteractionPage.css';
 import ChatHistory from '../components/ChatHistory';
 import { enterFullScreen, exitFullScreen } from '../utils/fullscreen';
 import TestConditionsModal from '../components/TestConditionsModal';
-import TypeformPopup from '../components/TypeformPopup'; //
+import TypeformPopup from '../components/TypeformPopup';
+import { fetchWithRetry } from '../utils/api';
 
 const InteractionPage = () => {
 	const location = useLocation();
@@ -37,13 +37,22 @@ const InteractionPage = () => {
 
 			const fetchInitialQuestion = async () => {
 				try {
-					const response = await axios.post(`${API_URL}/start`, {
-						prompt: initialPrompt,
-						currentLevel,
-						yearLevel,
+					const response = await fetchWithRetry(`${API_URL}/start`, {
+						method: 'POST',
+						headers: {
+							'Content-Type': 'application/json',
+						},
+						body: JSON.stringify({
+							prompt: initialPrompt,
+							currentLevel,
+							yearLevel,
+						}),
 					});
 
-					const initialQuestion = response.data.question;
+					// Parse the JSON response
+					const data = await response.json();
+
+					const initialQuestion = data.question;
 					setChatGPTQuestion(initialQuestion);
 
 					setConversation([
@@ -78,21 +87,29 @@ const InteractionPage = () => {
 
 		const evaluateAnswer = async () => {
 			try {
-				const response = await axios.post(`${API_URL}/evaluate`, {
-					messages: [
-						{ role: 'system', content: initialPrompt },
-						...conversation.map((msg) => ({
-							sender: msg.sender,
-							content: msg.content,
-						})),
-						{ sender: 'student', content: answer },
-					],
-					initialPrompt,
-					currentLevel,
-					yearLevel,
+				const response = await fetchWithRetry(`${API_URL}/evaluate`, {
+					method: 'POST',
+					headers: {
+						'Content-Type': 'application/json',
+					},
+					body: JSON.stringify({
+						messages: [
+							{ role: 'system', content: initialPrompt },
+							...conversation.map((msg) => ({
+								sender: msg.sender,
+								content: msg.content,
+							})),
+							{ sender: 'student', content: answer },
+						],
+						initialPrompt,
+						currentLevel,
+						yearLevel,
+					}),
 				});
 
-				const { feedback, nextQuestion, nextLevel } = response.data;
+				const data = await response.json();
+
+				const { feedback, nextQuestion, nextLevel } = data;
 
 				if (nextLevel === 'Completed') {
 					setConversation((prev) => [
